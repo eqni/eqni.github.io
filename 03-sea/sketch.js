@@ -10,7 +10,7 @@ let cell;
 function setup() {
   background("lightblue");
   createCanvas(windowWidth, windowHeight);
-  cell = 0.01 * min(widn');
+  cell = 0.01 * min(windowWidth, windowHeight);
   drawMap();
 }
 
