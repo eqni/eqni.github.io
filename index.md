@@ -3,6 +3,7 @@
 ## Demos
 - [Bouncing Ball](01-ball)
 - [Ball Object Notation](04-ball-object)
+
 ## Projects
 - [Interactive Scene](02-sandbox)
-- [](03-circle-sea)
+- [Arrays & Object Notation](03-sea)

@@ -10,7 +10,7 @@ let theBall = {
   y: 100,
   dx: 9, 
   dy: -3,
-  d: 50,
+  radius: 50,
   r: 255,
   g: 0,
   b: 0,
@@ -29,20 +29,20 @@ function draw() {
 
 function displayBall() {
   fill(theBall.r, theBall.g, theBall.b);
-  circle(theBall.x, theBall.y, theBall.d);
+  circle(theBall.x, theBall.y, theBall.radius);
 }
 
 function moveBall() {
   theBall.x += theBall.dx;
   theBall.y += theBall.dy;
-  theBall.x = theBall.x % (windowWidth + theBall.d);
-  if (theBall.x <= -1 * theBall.d) {
+  theBall.x = theBall.x % (windowWidth + theBall.radius);
+  if (theBall.x <= -1 * theBall.radius) {
     theBall.x += windowWidth;
   }
-  if (theBall.y <= -1 * theBall.d) {
+  if (theBall.y <= -1 * theBall.radius) {
     theBall.y += windowHeight;
   }
-  theBall.y = theBall.y % (windowHeight + theBall.d);
+  theBall.y = theBall.y % (windowHeight + theBall.radius);
 }
 
 function mousePressed() {
