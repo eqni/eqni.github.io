@@ -5,12 +5,19 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let worldmap = [];
-let cell;
+let worldMap = [];
+let pixelCount;
+let pixelWidth;
+let pixelLength;
+let pixelSize;
+let colorOffset;
+
 function setup() {
-  background("lightblue");
+  background("darkgray");
   createCanvas(windowWidth, windowHeight);
-  cell = 0.01 * min(windowWidth, windowHeight);
+  pixelWidth = 0.01 * windowHeight;
+  pixelLength = 0.01 * windowWidth;
+  pixelSize = 100;
   drawMap();
 }
 
@@ -18,10 +25,12 @@ function draw() {
 }
 
 function drawMap(){
-  fill("white");
-  for(let x = 0; x < cell; x++) {
-    for(let y = 0; y < cell; y++) {
-      circle(x, y, random(2, 4));
+  noStroke();
+  for(let x = 0; x < pixelLength + 5; x++) {
+    for(let y = 0; y < pixelWidth + 5; y++) {
+      colorOffset = (x + y) / 100;
+      fill(random(54, 60) + colorOffset, random(162, 168) + colorOffset, random(198, 204) + colorOffset);
+      circle(x * pixelSize, y * pixelSize, random(150, 250));
     }
   }
 }
