@@ -15,9 +15,7 @@ let colorOffset;
 function setup() {
   background("darkgray");
   createCanvas(windowWidth, windowHeight);
-  pixelWidth = 0.01 * windowHeight;
-  pixelLength = 0.01 * windowWidth;
-  pixelSize = 100;
+  pixelSize = 4;
   drawMap();
 }
 
@@ -26,11 +24,10 @@ function draw() {
 
 function drawMap(){
   noStroke();
-  for(let x = 0; x < pixelLength + 5; x++) {
-    for(let y = 0; y < pixelWidth + 5; y++) {
-      colorOffset = (x + y) / 100;
-      fill(random(54, 60) + colorOffset, random(162, 168) + colorOffset, random(198, 204) + colorOffset);
-      circle(x * pixelSize, y * pixelSize, random(150, 250));
+  for(let x = 0; x < windowWidth / pixelSize; x++) {
+    for(let y = 0; y < windowHeight / pixelSize; y++) {
+      fill(random(54, 90), random(162, 200), random(198, 255));
+      rect(x * pixelSize, y * pixelSize, 4, 4);
     }
   }
 }
