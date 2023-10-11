@@ -5,12 +5,13 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let theBall;
+let ballArray = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
-  theBall = spawnBall();
+  let theBall = spawnBall();
+  ballArray.push(theBall);
 }
 
 function draw() {
@@ -20,13 +21,16 @@ function draw() {
 }
 
 function mousePressed() {
-  theBall.dx += 2;
-  theBall.dy += 2;
+  let someBall = spawnBall();
+  someBall.x = mouseX;
+  someBall.y = mouseY;
+  ballArray.push(someBall);
 }
 
 function keyTyped() {
   if (key === " ") {
-    theBall = spawnBall();
+    let someBall = spawnBall();
+    ballArray.push(someBall);
   }
 }
 
@@ -45,19 +49,25 @@ function spawnBall() {
 }
 
 function displayBall() {
-  fill(theBall.r, theBall.g, theBall.b);
-  circle(theBall.x, theBall.y, theBall.radius);
+  for (let i = 0; i < ballArray.length; i++) {
+    let theBall = ballArray[i];
+    fill(theBall.r, theBall.g, theBall.b);
+    circle(theBall.x, theBall.y, theBall.radius);
+  }
 }
 
 function moveBall() {
-  theBall.x += theBall.dx;
-  theBall.y += theBall.dy;
-  theBall.x = theBall.x % (windowWidth + theBall.radius);
-  theBall.y = theBall.y % (windowHeight + theBall.radius);
-  if (theBall.x <= -theBall.radius) {
-    theBall.x += windowWidth;
-  }
-  if (theBall.y <= -theBall.radius) {
-    theBall.y += windowHeight;
+  for (let i = 0; i < ballArray.length; i++) {
+    let theBall = ballArray[i];
+    theBall.x += theBall.dx;
+    theBall.y += theBall.dy;
+    theBall.x = theBall.x % (windowWidth + theBall.radius);
+    theBall.y = theBall.y % (windowHeight + theBall.radius);
+    if (theBall.x <= -theBall.radius) {
+      theBall.x += windowWidth;
+    }
+    if (theBall.y <= -theBall.radius) {
+      theBall.y += windowHeight;
+    }
   }
 }
