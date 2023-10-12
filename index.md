@@ -4,6 +4,7 @@
 - [Bouncing Ball](01-ball)
 - [Ball Object Notation](04-ball-object)
 - [Ball Aray](05-ball-array)
+- [Perlin Noise Ball](06-noise-ball)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
