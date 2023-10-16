@@ -7,7 +7,7 @@
 
 let snakeArray = [];
 let pixelSize = 4;
-
+let i;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   drawMap();
@@ -15,7 +15,7 @@ function setup() {
 
 function draw() {
   displaySnake();
-  calcSnake();
+  // calcSnake();
 }
 
 function drawMap(){
@@ -34,33 +34,53 @@ function mousePressed() {
 function spawnSnake(){
   let rng = random();
   let snake;
-  if(rng < 0.8) {
+  if(rng < 0.4) {
     snake = {
       x: windowHeight / 2,
       y: windowWidth / 2,
       s: 4,
-      color: color(random(30, 255), random(30, 255), random(30, 255)),
+      color: color(random(55, 255), random(55, 255), random(55, 255)),
+      identity: "regular"
+    };
+  }
+  else if(rng < 0.99) {
+    snake = {
+      x: windowHeight / 2,
+      y: windowWidth / 2,
+      s: 4,
+      r: random(55, 255),
+      g: random(55, 255),
+      b: random(55, 255),
+      identity: "rgb"
     };
   }
   else{
     snake = {
       x: windowHeight / 2,
       y: windowWidth / 2,
-      s: 64,
-      color: color(5),
+      s: 4,
+      color: color(0),
+      identity: "evil"
     };
   }
-  snake.x = mouseX;
-  snake.y = mouseY;
+  snake.x = mouseX - mouseX % 4;
+  snake.y = mouseY - mouseY % 4;
   snakeArray.push(snake);
 }
 
 function displaySnake() {
-  for (let i = 0; i < snakeArray.length; i++) {
+  for (i = 0; i < snakeArray.length; i++) {
     let snake = snakeArray[i];
     let rng = random();
-    fill(snake.color);
-    stroke(snake.color - 15);
+    if (snake.identity === "rgb") {
+      snake.r += random(1);
+      snake.g += random(1);
+      snake.b += random(1);
+      fill(snake.r % 255, snake.g % 255, snake.b % 255);
+    } 
+    else {
+      fill(snake.color);
+    }
     if (rng < 0.25) {
       snake.x += snake.s;
     }
@@ -78,14 +98,3 @@ function displaySnake() {
   }
 }
 
-function calcSnake(){
-  for (let snake in snakeArray) {
-    for (let othersnake in snakeArray) {
-      let xdif = abs(snake.x - othersnake.x);
-      let ydif = abs(snake.y - othersnake.y);
-      if (xdif < 1000 || ydif < 1000){
-        spawnSnake();
-      }
-    }
-  }
-}
