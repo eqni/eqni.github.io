@@ -8,6 +8,8 @@
 let snakeArray = [];
 let pixelSize = 4;
 let i;
+let cell = 0.01;
+let click;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   drawMap();
@@ -15,7 +17,6 @@ function setup() {
 
 function draw() {
   displaySnake();
-  // calcSnake();
 }
 
 function drawMap(){
@@ -27,14 +28,83 @@ function drawMap(){
   }
 }
 
+// function drawMap() {
+//   for (let x = 0; x < windowWidth / 4; x++) {
+//     for (let y = 0; y < windowHeight / 4; y++) {
+//       if (x < random(0.02 * windowWidth) || y < random(0.02 * windowHeight)) {
+//         fill(0, 127, 255);
+//       } 
+//       else if (x < random(0.035 * windowWidth) || y < random(0.035 * windowHeight)) {
+//         fill(54, 162, 216);
+//       } 
+//       else if (x < random(0.04 * windowWidth) || y < random(0.04 * windowHeight)) {
+//         fill(21, 244, 238);
+//       } 
+//       else if (
+//         x < random(0.03 * windowWidth, 0.04 * windowHeight) ||
+//         y < random(0.03 * windowWidth, 0.04 * windowHeight)
+//       ) {
+//         fill(10, 255, 255);
+//       } 
+//       else if (
+//         x < random(0.04 * windowWidth, 0.05 * windowHeight) ||
+//         y < random(0.04 * windowWidth, 0.05 * windowHeight)
+//       ) {
+//         fill(random(225, 244), random(192, 216), random(146, 179));
+//       } 
+//       else if (
+//         x < random(0.05 * windowWidth, 0.055 * windowHeight) ||
+//         y < random(0.05 * windowWidth, 0.055 * windowHeight)
+//       ) {
+//         fill(188, 143, 146);
+//       } 
+//       else if (
+//         x < random(0.055 * windowWidth, 0.065 * windowHeight) ||
+//         y < random(0.055 * windowWidth, 0.065 * windowHeight)
+//       ) {
+//         fill(160, 102, 85);
+//       } 
+//       else if (x > 0.05 * windowWidth || y > 0.05 * windowHeight) {
+//         fill(random(20, 130), random(190, 255), random(0, 90));
+//       }
+//       rect(4 * x, 4 * y, 4, 4);
+//     }
+//   }
+// }
+
 function mousePressed() {
-  spawnSnake();
+  if (mouseX > 10 && mouseX < 30 && mouseY > 10 && mouseY < 30) {
+    click = "nature";
+  }
+  else if (mouseX > 40 && mouseX < 60 && mouseY > 10 && mouseY < 30) {
+    click = "random";
+  }
+  else {
+    spawnSnake();
+  }
+}
+
+function buttons() {
+  natureButton();
+  randomButton();
+}
+
+function natureButton() {
+  stroke(8);
+  fill(108, 108, 255);
+  rect(10, 10, 20, 20);
+}
+
+function randomButton() {
+  stroke(8);
+  fill(55, 55, 55);
+  rect(40, 10, 20, 20);
 }
 
 function spawnSnake(){
   let rng = random();
   let snake;
-  if(rng < 0.4) {
+  if(rng < 0.90) {
     snake = {
       x: windowHeight / 2,
       y: windowWidth / 2,
@@ -95,6 +165,7 @@ function displaySnake() {
     }
 
     rect(snake.x % windowWidth, snake.y % windowHeight, snake.s, snake.s);
+    buttons();
   }
 }
 
