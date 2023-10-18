@@ -1,4 +1,4 @@
-// Sandbox 2
+// Sandbox+
 // Andrew Chen
 // 10/4/2023
 //
@@ -10,13 +10,27 @@ let pixelSize = 4;
 let i;
 let cell = 0.01;
 let click;
+
+let rotation = 0;
+let switchClock = 0;
+
+// Images
+let normalOff;
+let normalOn;
+
+function preload() {
+  normalOff = loadImage("snake.png");
+  normalOn = loadImage("selected-snake.png");
+}
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   drawMap();
 }
 
 function draw() {
-  displaySnake();
+  displaySnakes();
+  displayImages();
 }
 
 function drawMap(){
@@ -28,77 +42,37 @@ function drawMap(){
   }
 }
 
-// function drawMap() {
-//   for (let x = 0; x < windowWidth / 4; x++) {
-//     for (let y = 0; y < windowHeight / 4; y++) {
-//       if (x < random(0.02 * windowWidth) || y < random(0.02 * windowHeight)) {
-//         fill(0, 127, 255);
-//       } 
-//       else if (x < random(0.035 * windowWidth) || y < random(0.035 * windowHeight)) {
-//         fill(54, 162, 216);
-//       } 
-//       else if (x < random(0.04 * windowWidth) || y < random(0.04 * windowHeight)) {
-//         fill(21, 244, 238);
-//       } 
-//       else if (
-//         x < random(0.03 * windowWidth, 0.04 * windowHeight) ||
-//         y < random(0.03 * windowWidth, 0.04 * windowHeight)
-//       ) {
-//         fill(10, 255, 255);
-//       } 
-//       else if (
-//         x < random(0.04 * windowWidth, 0.05 * windowHeight) ||
-//         y < random(0.04 * windowWidth, 0.05 * windowHeight)
-//       ) {
-//         fill(random(225, 244), random(192, 216), random(146, 179));
-//       } 
-//       else if (
-//         x < random(0.05 * windowWidth, 0.055 * windowHeight) ||
-//         y < random(0.05 * windowWidth, 0.055 * windowHeight)
-//       ) {
-//         fill(188, 143, 146);
-//       } 
-//       else if (
-//         x < random(0.055 * windowWidth, 0.065 * windowHeight) ||
-//         y < random(0.055 * windowWidth, 0.065 * windowHeight)
-//       ) {
-//         fill(160, 102, 85);
-//       } 
-//       else if (x > 0.05 * windowWidth || y > 0.05 * windowHeight) {
-//         fill(random(20, 130), random(190, 255), random(0, 90));
-//       }
-//       rect(4 * x, 4 * y, 4, 4);
-//     }
-//   }
-// }
-
 function mousePressed() {
-  if (mouseX > 10 && mouseX < 30 && mouseY > 10 && mouseY < 30) {
-    click = "nature";
+  spawnSnake();
+}
+
+function keyPressed() {
+  if (keyCode === 37) {
+    rotation--;
+    switchClock = 0;
   }
-  else if (mouseX > 40 && mouseX < 60 && mouseY > 10 && mouseY < 30) {
-    click = "random";
+  if (keyCode === 39) {
+    rotation++;
+    switchClock = 0;
+  }
+}
+
+function displayImages() {
+  switchClock++;
+  if (switchClock < 100) {
+    normalOn.resize(100, 100);
+    normalOff.resize(100, 100);
+  } 
+  else {
+    normalOn.resize(20, 20);
+    normalOff.resize(20, 20);
+  }
+  if (rotation % 2 === 0) {
+    image(normalOn, 10, 10);
   }
   else {
-    spawnSnake();
+    image(normalOff, 10, 10);
   }
-}
-
-function buttons() {
-  natureButton();
-  randomButton();
-}
-
-function natureButton() {
-  stroke(8);
-  fill(108, 108, 255);
-  rect(10, 10, 20, 20);
-}
-
-function randomButton() {
-  stroke(8);
-  fill(55, 55, 55);
-  rect(40, 10, 20, 20);
 }
 
 function spawnSnake(){
@@ -138,7 +112,7 @@ function spawnSnake(){
   snakeArray.push(snake);
 }
 
-function displaySnake() {
+function displaySnakes() {
   for (i = 0; i < snakeArray.length; i++) {
     let snake = snakeArray[i];
     let rng = random();
@@ -165,7 +139,9 @@ function displaySnake() {
     }
 
     rect(snake.x % windowWidth, snake.y % windowHeight, snake.s, snake.s);
-    buttons();
+  
   }
 }
+
+
 
