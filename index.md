@@ -6,7 +6,9 @@
 - [Ball Aray](05-ball-array)
 - [Perlin Noise Ball](06-noise-ball)
 - [Images and Sounds](07-images-sounds)
+- [Terrain Generation](08-terrain-generation)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
-- [Arrays & Object Notation](03-sandbox-2)
+- [Arrays & Object Notation](03-sandbox+)
+- [](09-)

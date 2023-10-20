@@ -22,7 +22,7 @@ let font;
 
 // Loads font
 function preload() {
-  font = loadFont('Pixel Font.TTF');
+  font = loadFont("Pixel Font.TTF");
 }
 
 // Setup
@@ -36,7 +36,7 @@ function setup() {
     position: 0,
     evil: [[10, 10, 10], [169, 5, 5], [65, 55, 55], [30, 2, 2], [9, 17, 7], [255, 9, 65]],
     corruption: [[36, 47, 92], [37, 28, 78], [43, 15, 61], [30, 2, 2], [47, 10, 40], [54, 8, 8], [20, 6, 7]],
-  }
+  };
 }
 
 // Loads Snakes and the State
@@ -82,7 +82,8 @@ function spawnSnake() {
         color: color(random(55, 255), random(55, 255), random(55, 255)),
         repeat: 1,
       };
-    } else {
+    } 
+    else {
       snake = {
         r: random(55, 255),
         g: random(55, 255),
@@ -110,8 +111,8 @@ function spawnSnake() {
   }
 
   // Adds general characteristics to snakes before adding them to the array
-  snake.x = mouseX - (mouseX % 4);
-  snake.y = mouseY - (mouseY % 4);
+  snake.x = mouseX - mouseX % 4;
+  snake.y = mouseY - mouseY % 4;
   snake.s = pixelSize;
   snakeArray.push(snake);
 }
@@ -138,7 +139,7 @@ function drawSnakes() {
     // Executes Corruption Characteristics
     else if (snake.identity === "corrupt") {
       fill(snakeState.corruption[floor(random() * snakeState.corruption.length)]);
-      snake.s = random(2, 7)
+      snake.s = random(2, 7);
     } 
     else {
       fill(snake.color);
@@ -148,11 +149,14 @@ function drawSnakes() {
     for (let j = 0; j < snake.repeat; j++) {
       if (rng < 0.25) {
         snake.x += snake.s;
-      } else if (rng < 0.5) {
+      } 
+      else if (rng < 0.5) {
         snake.x -= snake.s;
-      } else if (rng < 0.75) {
+      } 
+      else if (rng < 0.75) {
         snake.y += snake.s;
-      } else {
+      } 
+      else {
         snake.y -= snake.s;
       }
 
