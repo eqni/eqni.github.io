@@ -169,40 +169,46 @@ function drawSnakes() {
 // Loads an icon representing the current state
 function drawUI() {
   strokeWeight(8);
-  let time = millis();
-
+  let theme;
   // Normal State
   if (snakeState.position % 3 === 0) {
-    fill(169, 147, 152);
-    rect(4, 4, 40, 40);
-    fill(0);
-    text("N", 13, 37);
-    fill(255);
-    text("N", 11, 36);
+    theme = {
+      Stroke: 0,
+      Fill: (169, 147, 152),
+      letter: "N",
+      letterFill: 255,
+      letterEdges: 220
+    };
   }
+
   // Evil State
   else if (snakeState.position % 3 === 1) {
-    if (time % 100 < 25) {
-      fill(65, 55, 55);
-      rect(4, 4, 40, 40);
-      fill(0);
-      text("E", 13, 37);
-      fill(130, 50, 50);
-      text("E", 11, 36);
-    }
+    theme = {
+      Stroke: 0,
+      Fill: (65, 55, 55),
+      letter: "E",
+      letterFill: (130, 50, 50),
+      letterEdges: 0
+    };
   }
+
   // Corruption State
   else if (snakeState.position % 3 === 2) {
-    if (time % 100 < 25) {
-      fill(43, 15, 62);
-      rect(4, 4, 40, 40);
-      fill(0);
-      text("C", 13, 37);
-      fill(54, 60, 60);
-      text("C", 11, 36);
-    }
+    fill(43, 15, 62);
+    rect(4, 4, 40, 40);
+    fill(0);
+    text("C", 13, 37);
+    fill(54, 60, 60);
+    text("C", 11, 36);
   }
-  fill("white");
+  stroke(theme.Stroke);
+  fill(theme.Fill);
+  rect(4, 4, 40, 40);
+  fill(theme.letterEdges);
+  text(theme.letter, 13, 37);
+  fill(theme.letterFill);
+  text(theme.letter, 11, 36);
+  fill(theme.Fill);
   rect(4, 44, 40, windowHeight);
   rect(44, 4, windowWidth, 40);
 }
