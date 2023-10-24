@@ -33,7 +33,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   createMap();
-  textSize(32);
+  textSize(30);
   textFont(font);
 }
 
@@ -170,17 +170,17 @@ function drawSnakes() {
 function drawUI() {
   strokeWeight(8);
   let theme;
+  let size = min(windowWidth, windowHeight) / 20;
   // Normal State
   if (snakeState.position % 3 === 0) {
     theme = {
       Stroke: 0,
-      Fill: (169, 147, 152),
+      Fill: 180,
       letter: "N",
       letterFill: 255,
       letterEdges: 220
     };
   }
-
   // Evil State
   else if (snakeState.position % 3 === 1) {
     theme = {
@@ -191,24 +191,24 @@ function drawUI() {
       letterEdges: 0
     };
   }
-
   // Corruption State
   else if (snakeState.position % 3 === 2) {
-    fill(43, 15, 62);
-    rect(4, 4, 40, 40);
-    fill(0);
-    text("C", 13, 37);
-    fill(54, 60, 60);
-    text("C", 11, 36);
+    theme = {
+      Stroke: 0,
+      Fill: (43, 15, 62),
+      letter: "C",
+      letterFill: (54, 60, 60),
+      letterEdges: 0
+    };
   }
   stroke(theme.Stroke);
   fill(theme.Fill);
-  rect(4, 4, 40, 40);
-  fill(theme.letterEdges);
-  text(theme.letter, 13, 37);
-  fill(theme.letterFill);
-  text(theme.letter, 11, 36);
-  fill(theme.Fill);
-  rect(4, 44, 40, windowHeight);
-  rect(44, 4, windowWidth, 40);
+  rect(4, 4, size, size);
+  // fill(theme.letterEdges);
+  // text(theme.letter, 12, 33);
+  // fill(theme.letterFill);
+  // text(theme.letter, 10, 32);
+  // fill(theme.Fill);
+  // rect(4, 40, 36, windowHeight);
+  // rect(40, 4, windowWidth, 36);
 }
