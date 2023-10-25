@@ -4,23 +4,20 @@
 
 let grid;
 let cellSize;
-const GRID_SIZE = 15;
+const GRID_SIZE = 60;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  if (height > width) {
-    cellSize = width/GRID_SIZE;
-  }
-  else {
-    cellSize = height/GRID_SIZE;
-  }
+  cellSize = min(windowHeight, windowWidth) / GRID_SIZE;
   grid = generateRandomGrid(GRID_SIZE, GRID_SIZE);
 }
 
 function draw() {
   background(220);
   displayGrid();
+  console.log(mouseX);
+  console.log(mouseY);
 }
 
 function keyTyped() {
@@ -33,6 +30,7 @@ function keyTyped() {
 }
 
 function displayGrid() {
+  noStroke();
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
       if (grid[y][x] === 0) {
@@ -74,6 +72,6 @@ function generateEmptyGrid(cols, rows) {
   return randomArray;
 }
 
-// function mousePressed(){
-//   grid[mouseY / 4][mouseX / 4] = abs(grid[mouseY / 4][mouseX / 4] - 1);
-// }
+function mousePressed(){
+  grid[floor(mouseY / cellSize)][floor(mouseX / cellSize)] = abs(grid[floor(mouseY / cellSize)][floor(mouseX / cellSize)] - 1);
+}
