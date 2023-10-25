@@ -37,5 +37,11 @@ function generateGrid(rows, cols) {
 }
 
 function mousePressed(){
-  grid[floor(mouseX / cellSize)][floor(mouseY / cellSize)] = abs(grid[floor(mouseX / cellSize)][floor(mouseY / cellSize)] - 1);
+  let x = floor(mouseX / cellSize);
+  let y = floor(mouseY / cellSize);
+  grid[x][y] = abs(grid[x][y] - 1);
+  grid[x + 1][y] = abs(grid[x + 1][y] - 1);
+  grid[x - 1][y] = abs(grid[x - 1][y] - 1);
+  grid[x][y + 1] = abs(grid[x][y + 1] - 1);
+  grid[x][y - 1] = abs(grid[x][y - 1] - 1);
 }
