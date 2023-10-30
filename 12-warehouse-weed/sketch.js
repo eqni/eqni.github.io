@@ -1,30 +1,42 @@
 // Weed
 
 const GRID_SIZE = 50;
-const WEED_HIGH = 1.5;
 
 let grid = [];
+let state;
 let cellSize;
-
 let xOffset = 0;
 let yOffset = 0;
-let x = 6;
-let y = 6;
+let x;
+let y;
 
 function setup() {
-  noStroke();
   createCanvas(windowWidth, windowHeight);
-
-  cellSize = min(windowHeight, windowWidth) / GRID_SIZE;
   resizeScale();
+  noStroke();
+  background(0);
+  state = {
+    identity: "normal",
+    size: [1.5, 1.5]
+  };
+  x = GRID_SIZE / 2;
+  y = GRID_SIZE / 2;
+  cellSize = min(windowHeight, windowWidth) / GRID_SIZE;
   grid = genMap(GRID_SIZE, GRID_SIZE);
 }
 
 function draw() {
-  background(0);
   drawMap(GRID_SIZE, GRID_SIZE);
   drawPlayer();
-  console.log(x);
+}
+
+function resizeScale() {
+  if (windowHeight >= windowWidth) {
+    yOffset = (windowHeight - windowWidth) / 2;
+  }
+  else if (windowHeight <= windowWidth) {
+    xOffset = (windowWidth - windowHeight) / 2;
+  }
 }
 
 function genMap(rows, cols) {
@@ -63,7 +75,10 @@ function genMap(rows, cols) {
         newMap[x][y] = color(random(220, 230));
       }
       else if (y < 27) {
-        newMap[x][y] = color(random(2, 10));
+        newMap[x][y] = color(0);
+      }
+      if (y === 26 && x > 22 && x < 28) {
+        newMap[x][y] = color(50, 84, 48, 50);
       }
     }
   }
@@ -79,31 +94,41 @@ function drawMap(rows, cols) {
   }
 }
 
-function resizeScale() {
-  if (windowHeight >= windowWidth) {
-    yOffset = (windowHeight - windowWidth) / 2;
-  }
-  else if (windowHeight <= windowWidth) {
-    xOffset = (windowWidth - windowHeight) / 2;
-  }
-}
-
 function drawPlayer() {
   fill(0);
-  rect((x - WEED_HIGH / 2) * cellSize + xOffset, (y - WEED_HIGH / 2) * cellSize + yOffset, cellSize * WEED_HIGH, cellSize * WEED_HIGH);
   if (keyIsDown(39)) {
     x++;
   }
-  if (keyIsDown(37)) {
+  else if (keyIsDown(37)) {
     x--;
   }
-  if (keyIsDown(40)) {
+  else if (keyIsDown(40)) {
     y++;
+    wallCheck();
   }
-  if (keyIsDown(38)) {
+  else if (keyIsDown(38)) {
     y--;
+    wallCheck();
   }
-  x = constrain(x, 1, 49);
-  y = constrain(y, 2, 25);
+  if (state.identity === "normal") {
+    x = constrain(x, 1, 49);
+    y = constrain(y, 2, 25);
+    state.size = [1.5, 1.5];
+    rect((x - state.size[0] / 2) * cellSize + xOffset, (y - state.size[1] / 2) * cellSize + yOffset, cellSize * state.size[0], cellSize * state.size[1]);
+  }
+  else if (state.identity === "truck") {
+    x = constrain(x, 1, 49);
+    y = constrain(y, 26, 50);
+    state.size = [1.5, 7.5];
+  }
+  rect((x - state.size[0] / 2) * cellSize + xOffset, (y - state.size[1] / 2) * cellSize + yOffset, cellSize * state.size[0], cellSize * state.size[1]);
+}
 
+function wallCheck() {
+  if(y < 25 && x > 22 && x < 28) {
+    state.identity = "normal";
+  }
+  if(y > 25 && x > 22 && x < 28) {
+    state.identity = "truck";
+  } 
 }
