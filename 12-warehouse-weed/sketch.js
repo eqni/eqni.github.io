@@ -2,7 +2,11 @@
 
 const GRID_SIZE = 50;
 
-let grid = [];
+let maps = {
+  warehouse: [],
+  dock: []
+};
+
 let state;
 let cellSize;
 let xOffset = 0;
@@ -11,6 +15,10 @@ let x;
 let y;
 let font;
 let money = 100;
+let income = 0;
+let time;
+let mapData = [];
+let plantGrowthStates = [[136, 8, 8], [170, 74, 68], [238, 75, 43], [255, 195, 0], [199, 234, 70], [152, 251, 152], [27, 131, 102]];
 
 // Loads font
 function preload() {
@@ -28,16 +36,28 @@ function setup() {
     identity: "normal",
     size: [1.5, 1.5],
     direction: 0,
+    stage: 0
   };
   x = GRID_SIZE / 2;
   y = GRID_SIZE / 2;
   cellSize = min(windowHeight, windowWidth) / GRID_SIZE;
-  grid = genMap(GRID_SIZE, GRID_SIZE);
+  maps.warehouse = genMap(GRID_SIZE, GRID_SIZE);
+  mapData = genData(GRID_SIZE, GRID_SIZE);
 }
 
 function draw() {
+  time = millis();
   drawMap(GRID_SIZE, GRID_SIZE);
   drawPlayer();
+  rect(0, 0, 400, 100);
+  drawMoney();
+  // if(time % 200 < 25) {
+  //   money += income;
+  //   income = 0;
+  // }
+  if(time % 1000 < 100) {
+    stimulatePlants();
+  }
 }
 
 function resizeScale() {
@@ -51,6 +71,8 @@ function resizeScale() {
 
 function genMap(rows, cols) {
   let newMap = [];
+
+  // Warehouse Map
   for (let x = 0; x < rows; x++) {
     newMap.push([]);
     for (let y = 0; y < cols; y++) {
@@ -84,10 +106,27 @@ function genMap(rows, cols) {
   return newMap;
 }
 
+function genData(rows, cols) {
+  let newMap = [];
+  for (let x = 0; x < rows; x++) {
+    newMap.push([]);
+    for (let y = 0; y < cols; y++) {
+      newMap[x].push([]);
+      if (y < 34 && y > 0) {
+        newMap[x][y] = 1;
+      }
+      else {
+        newMap[x][y] = 0;
+      }
+    }
+  }
+  return newMap;
+}
+
 function drawMap(rows, cols) {
   for (let x = 0; x < rows; x++) {
     for (let y = 0; y < cols; y++) {
-      fill(grid[x][y]);
+      fill(maps.warehouse[x][y]);
       rect(x * cellSize + xOffset, y * cellSize + yOffset, cellSize, cellSize);
     }
   }
@@ -136,13 +175,32 @@ function gateCheck() {
   } 
 }
 
-function displayMoney() {
-  let tempMoney = money;
-  let temp;
-  let display = [];
-  for (let i = log(money); i > 0; i--) {
-    temp = floor(tempMoney / 10 ** i);
-    display.push(temp);
-    tempMoney -= tempMoney - temp * 10 ** i;
+function drawMoney() {
+  fill(234, 173, 11);
+  text(money, 2 * cellSize, 2 * cellSize);
+}
+
+function mousePressed() {
+  let px = floor((mouseX - xOffset) / cellSize);
+  let py = floor((mouseY - yOffset) / cellSize);
+  if (!(mapData[px][py] === 2) && py > 0 && py < 34 && money >= 100){
+    mapData[px][py] = [2, 0];
+    maps.warehouse[px][py] = plantGrowthStates[0];
+    money-= 100;
+  }
+  if(mapData[px][py] === 2) {
+    mapData[px][py] = 0;
+    income += 200;
+  }
+}
+
+function stimulatePlants() {
+  for (let x = 0; x < GRID_SIZE; x++) {
+    for (let y = 0; y < GRID_SIZE; y++) {
+      if(mapData[x][y][0] === 2) {
+        mapData[x][y][1] += 1;
+        maps.warehouse[x][y] = plantGrowthStates[mapData[x][y][1]];
+      }
+    }
   }
 }
