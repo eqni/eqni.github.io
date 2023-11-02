@@ -3,11 +3,18 @@
 const GRID_SIZE = 50;
 
 let maps = {
-  warehouse: [],
-  dock: []
+  lobbyMap: [],
+  shopMap: [],
+  data: []
 };
 
-let state;
+let state = {
+  identity: "normal",
+  size: [1.5, 1.5],
+  direction: 0,
+  stage: 0
+};
+
 let cellSize;
 let xOffset = 0;
 let yOffset = 0;
@@ -15,11 +22,9 @@ let x;
 let y;
 let font;
 let money = 100;
-let income = 0;
 let time;
-let mapData = [];
 let plantGrowthStates = [[136, 8, 8], [170, 74, 68], [238, 75, 43], [255, 195, 0], [199, 234, 70], [152, 251, 152], [27, 131, 102]];
-
+let lobbyMap = [];
 // Loads font
 function preload() {
   font = loadFont("Pixel Font.TTF");
@@ -32,17 +37,11 @@ function setup() {
   background(0);
   textSize(30);
   textFont(font);
-  state = {
-    identity: "normal",
-    size: [1.5, 1.5],
-    direction: 0,
-    stage: 0
-  };
   x = GRID_SIZE / 2;
   y = GRID_SIZE / 2;
   cellSize = min(windowHeight, windowWidth) / GRID_SIZE;
-  maps.warehouse = genMap(GRID_SIZE, GRID_SIZE);
-  mapData = genData(GRID_SIZE, GRID_SIZE);
+  maps.lobbyMap = genMap(GRID_SIZE, GRID_SIZE);
+  maps.data = genData(GRID_SIZE, GRID_SIZE);
 }
 
 function draw() {
@@ -51,11 +50,7 @@ function draw() {
   drawPlayer();
   rect(0, 0, 400, 100);
   drawMoney();
-  // if(time % 200 < 25) {
-  //   money += income;
-  //   income = 0;
-  // }
-  if(time % 1000 < 100) {
+  if(time % 60 === 0) {
     stimulatePlants();
   }
 }
@@ -72,15 +67,16 @@ function resizeScale() {
 function genMap(rows, cols) {
   let newMap = [];
 
-  // Warehouse Map
+  // lobbyMap Map
   for (let x = 0; x < rows; x++) {
     newMap.push([]);
     for (let y = 0; y < cols; y++) {
       newMap[x].push([]);
+
       // Dirt
       newMap[x][y] = color(random(110, 130), random(40, 50), random(25, 40));
 
-      // Warehouse
+      // lobbyMap
       if (y < 34 && y > 0) {
         newMap[x][y] = color(random(220, 230));
       }
@@ -120,13 +116,14 @@ function genData(rows, cols) {
       }
     }
   }
+
   return newMap;
 }
 
 function drawMap(rows, cols) {
   for (let x = 0; x < rows; x++) {
     for (let y = 0; y < cols; y++) {
-      fill(maps.warehouse[x][y]);
+      fill(maps.lobbyMap[x][y]);
       rect(x * cellSize + xOffset, y * cellSize + yOffset, cellSize, cellSize);
     }
   }
@@ -183,23 +180,26 @@ function drawMoney() {
 function mousePressed() {
   let px = floor((mouseX - xOffset) / cellSize);
   let py = floor((mouseY - yOffset) / cellSize);
-  if (!(mapData[px][py] === 2) && py > 0 && py < 34 && money >= 100){
-    mapData[px][py] = [2, 0];
-    maps.warehouse[px][py] = plantGrowthStates[0];
-    money-= 100;
+  if(maps.data[px][py][1] === 6) {
+    maps.data[px][py] = 0;
+    maps.lobbyMap[px][py] = color(random(220, 230));
+    money += 250;
   }
-  if(mapData[px][py] === 2) {
-    mapData[px][py] = 0;
-    income += 200;
+  else if (!(maps.data[px][py][0] === 2) && py > 0 && py < 34 && money >= 100){
+    maps.data[px][py] = [2, 0];
+    maps.lobbyMap[px][py] = color(plantGrowthStates[0]);
+    money-= 100;
   }
 }
 
 function stimulatePlants() {
   for (let x = 0; x < GRID_SIZE; x++) {
     for (let y = 0; y < GRID_SIZE; y++) {
-      if(mapData[x][y][0] === 2) {
-        mapData[x][y][1] += 1;
-        maps.warehouse[x][y] = plantGrowthStates[mapData[x][y][1]];
+      if(maps.data[x][y][0] === 2) {
+        if (maps.data[x][y][1] < 6) {
+          maps.data[x][y][1] += 1;
+        }
+        maps.lobbyMap[x][y] = color(plantGrowthStates[maps.data[x][y][1]]);
       }
     }
   }
