@@ -5,8 +5,10 @@
 //
 // Extra for Experts:
 // - loaded fonts
-// - 3D Arrays (Questionable implementation)
+// - 3D Arrays
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+// Variables
 const GRID_SIZE = 50;
 
 let maps = {
@@ -19,7 +21,9 @@ let state = {
   identity: "normal",
   size: [1.5, 1.5],
   direction: 0,
-  stage: 0
+  stage: 0,
+  plant: 0,
+  cost: 100,
 };
 
 let cellSize;
@@ -31,16 +35,16 @@ let font;
 let money = 100;
 let plantGrowthStates = [[136, 8, 8], [170, 74, 68], [238, 75, 43], [255, 195, 0], [199, 234, 70], [152, 251, 152], [27, 131, 102]];
 
-// Loads font
+// Loads Font
 function preload() {
   font = loadFont("Pixel Font.TTF");
 }
 
+// Builds Map, Sets up Text Scale
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
   resizeScale();
-  textSize(32);
   textFont(font);
 
   x = GRID_SIZE / 2;
@@ -70,7 +74,7 @@ function mousePressed() {
   else if (!(maps.data[px][py][0] === 2) && py > 0 && py < 34 && money >= 100){
     maps.data[px][py] = [2, 0];
     maps.lobbyMap[px][py] = color(plantGrowthStates[0]);
-    money -= 100;
+    money -= state.cost;
   }
 }
 
@@ -86,6 +90,12 @@ function keyPressed() {
         }
       }
     }
+  }
+  else if (keyCode === 38) {
+    state.plant++;
+  }
+  else if (keyCode === 40) {
+    state.plant++;
   }
 }
 
@@ -107,6 +117,7 @@ function draw() {
   drawBorder();
   drawMoney();
   drawPlants();
+  drawUI();
 }
 
 function drawMap() {
@@ -121,17 +132,17 @@ function drawMap() {
 function drawPlayer() {
   fill(0);
   // Movement
-  if (keyIsDown(39)) {
+  if (keyIsDown(68)) {
     x++;
   }
-  else if (keyIsDown(37)) {
+  else if (keyIsDown(65)) {
     x--;
   }
-  else if (keyIsDown(40)) {
+  else if (keyIsDown(83)) {
     y++;
     state.direction = 0;
   }
-  else if (keyIsDown(38)) {
+  else if (keyIsDown(87)) {
     y--;
     state.direction = 1;
   }
@@ -161,6 +172,7 @@ function drawBorder() {
 
 function drawMoney() {
   noStroke();
+  textSize(32);
   fill(234, 173, 11);
   text(money, 12, 2 * cellSize + 4);
 }
@@ -232,4 +244,41 @@ function genData() {
   }
 
   return newMap;
+}
+
+// Loads an icon representing the current state
+function drawUI() {
+  strokeWeight(8);
+  stroke(63, 112, 117);
+  textSize(39);
+  let outerFill;
+  let innerFill;
+  let char;
+
+  // Backyard Weed
+  if (state.plant % 3 === 0) {
+    outerFill = color(169, 147, 152);
+    innerFill = color(255);
+    char = "B";
+  }
+  // Wicked Weed
+  else if (state.plant % 3 === 1) {
+    outerFill = color(65, 55, 55);
+    innerFill = color(130, 50, 50);
+    char = "W";
+  }
+  // Void Weed
+  else if (state.plant % 3 === 2) {
+    outerFill = color(43, 15, 62);
+    innerFill = color(54, 60, 60);
+    char = "V";
+  }
+
+  fill(outerFill);
+  rect(4, cellSize / 2 + 48, cellSize / 2 + 46, cellSize / 2 + 46);
+  fill(63, 112, 117);
+  noStroke();
+  text(char, 14, cellSize / 2 + 90);
+  fill(innerFill);
+  text(char, 16, cellSize / 2 + 91);
 }
