@@ -112,10 +112,6 @@ function draw() {
   noStroke();
   drawMap(GRID_SIZE, GRID_SIZE);
   drawPlayer();
-  fill(0);
-  rect(0, 0, 400, 100);
-  drawBorder();
-  drawMoney();
   drawPlants();
   drawUI();
 }
@@ -161,20 +157,6 @@ function drawPlayer() {
     state.size = [1.5, 4.5];
     rect((x - state.size[0] / 2) * cellSize + xOffset, y * cellSize + yOffset, cellSize * state.size[0], cellSize * state.size[1]);
   }
-}
-
-function drawBorder() {
-  strokeWeight(8);
-  stroke(234, 173, 11);
-  fill(255, 255, 167);
-  rect(4, 4, 29 * money.toString().length + 15, cellSize / 2 + 36);
-}
-
-function drawMoney() {
-  noStroke();
-  textSize(32);
-  fill(234, 173, 11);
-  text(money, 12, 2 * cellSize + 4);
 }
 
 function drawPlants() {
@@ -248,37 +230,67 @@ function genData() {
 
 // Loads an icon representing the current state
 function drawUI() {
-  strokeWeight(8);
-  stroke(63, 112, 117);
-  textSize(39);
+  let borderFill;
   let outerFill;
   let innerFill;
   let char;
+  let desc;
 
-  // Backyard Weed
+  // Cafeteria CannaSib
   if (state.plant % 3 === 0) {
-    outerFill = color(169, 147, 152);
-    innerFill = color(255);
-    char = "B";
-  }
-  // Wicked Weed
-  else if (state.plant % 3 === 1) {
-    outerFill = color(65, 55, 55);
-    innerFill = color(130, 50, 50);
-    char = "W";
-  }
-  // Void Weed
-  else if (state.plant % 3 === 2) {
-    outerFill = color(43, 15, 62);
-    innerFill = color(54, 60, 60);
-    char = "V";
+    outerFill = color(180, 237, 210);
+    innerFill = color(184, 184, 255);
+    borderFill = color(147, 129, 255);
+    char = "C";
+    desc = "How come the cafeteria food is so bad, but they never stop eating it?";
   }
 
+  // Washroom WeDe
+  else if (state.plant % 3 === 1) {
+    outerFill = color(64, 110, 142);
+    innerFill = color(142, 168, 195);
+    borderFill = color(35, 57, 91);
+    char = "W";
+    desc = "What's so good about the washroom that they gotta go every period? ";
+  }
+
+  // Hallway HeriOn
+  else if (state.plant % 3 === 2) {
+    outerFill = color(48, 105, 100);
+    innerFill = color(105, 162, 151);
+    borderFill = color(54, 60, 60);
+    char = "H";
+    desc = "They're doing it again, there are rooms everywhere, what's so good about the halls?";
+  }
+
+  // Money Box
+  strokeWeight(8);
+  fill(0);
+  rect(0, 0, 400, 100);
+  stroke(234, 173, 11);
+  fill(255, 255, 167);
+  rect(4, 4, 29 * money.toString().length + 15, cellSize / 2 + 46);
+
+  // State Box
+  stroke(borderFill);
   fill(outerFill);
-  rect(4, cellSize / 2 + 48, cellSize / 2 + 46, cellSize / 2 + 46);
+  rect(4, cellSize / 2 + 58, cellSize / 2 + 56, cellSize / 2 + 56);
+  rect(4, windowHeight - 200, xOffset - 8, 196);
   fill(63, 112, 117);
+   
+  // Money
   noStroke();
-  text(char, 14, cellSize / 2 + 90);
+  textSize(32);
+  fill(234, 173, 11);
+  text(money, 12, 2 * cellSize + 9);
+
+  // State + Description
+  textSize(44);
+  text(char, 18, cellSize / 2 + 106);
+  textSize(24);
+  text(desc, 14, windowHeight - 161, 450);
   fill(innerFill);
-  text(char, 16, cellSize / 2 + 91);
+  text(desc, 16, windowHeight - 160, 450);
+  textSize(44);
+  text(char, 18, cellSize / 2 + 107);
 }
