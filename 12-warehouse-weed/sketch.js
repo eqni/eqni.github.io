@@ -24,6 +24,8 @@ let state = {
   stage: 0,
   plant: 0,
   cost: 100,
+  gain: 250,
+  growth: [[[136, 82, 127], [159, 135, 175], [188, 231, 253], [169, 237, 190], [80, 132, 132]], [[54, 60, 60], [65, 193, 241], [52, 110, 129], [152, 251, 152], [27, 131, 102]], [[54, 60, 60], [71, 125, 139], [60, 155, 162], [105, 162, 151], [48, 105, 100]]],
 };
 
 let cellSize;
@@ -33,7 +35,6 @@ let x;
 let y;
 let font;
 let money = 100;
-let plantGrowthStates = [[136, 8, 8], [170, 74, 68], [238, 75, 43], [255, 195, 0], [199, 234, 70], [152, 251, 152], [27, 131, 102]];
 
 // Loads Font
 function preload() {
@@ -66,15 +67,25 @@ function resizeScale() {
 function mousePressed() {
   let px = floor((mouseX - xOffset) / cellSize);
   let py = floor((mouseY - yOffset) / cellSize);
-  if(maps.data[px][py][1] === 6) {
+  if(maps.data[px][py][1] === 4) {
+    money += maps.data[px][py][2];
     maps.data[px][py] = 0;
     maps.lobbyMap[px][py] = color(random(220, 230));
-    money += 250;
   }
-  else if (!(maps.data[px][py][0] === 2) && py > 0 && py < 34 && money >= 100){
-    maps.data[px][py] = [2, 0];
-    maps.lobbyMap[px][py] = color(plantGrowthStates[0]);
-    money -= state.cost;
+  else if (state.plant % 3 === 0 && py > 0 && py < 34 && money >= 100){
+    maps.data[px][py] = [2, 0, 250];
+    maps.lobbyMap[px][py] = color(state.growth[0][0]);
+    money -= 100;
+  }
+  else if (state.plant % 3 === 1 && py > 0 && py < 34 && money >= 500){
+    maps.data[px][py] = [3, 0, 1000];
+    maps.lobbyMap[px][py] = color(state.growth[1][0]);
+    money -= 500;
+  }
+  else if (state.plant % 3 === 2 && py > 0 && py < 34 && money >= 200){
+    maps.data[px][py] = [4, 0, 5000];
+    maps.lobbyMap[px][py] = color(state.growth[2][0]);
+    money -= 2000;
   }
 }
 
@@ -83,10 +94,10 @@ function keyPressed() {
   if (keyCode === 32) {
     for (let x = 0; x < GRID_SIZE; x++) {
       for (let y = 0; y < 34; y++) {
-        if(maps.data[x][y][1] === 6) {
+        if(maps.data[x][y][1] === 4) {
+          money += maps.data[x][y][2];
           maps.data[x][y] = 0;
           maps.lobbyMap[x][y] = color(random(220, 230));
-          money += 250;
         }
       }
     }
@@ -162,11 +173,11 @@ function drawPlayer() {
 function drawPlants() {
   for (let x = 0; x < GRID_SIZE; x++) {
     for (let y = 0; y < GRID_SIZE; y++) {
-      if (maps.data[x][y][0] === 2 && random() < 0.05) {
-        if (maps.data[x][y][1] < 6) {
+      if (maps.data[x][y][0] > 1 && random() < 0.05) {
+        if (maps.data[x][y][1] < 4) {
           maps.data[x][y][1] += 1;
         }
-        maps.lobbyMap[x][y] = color(plantGrowthStates[maps.data[x][y][1]]);
+        maps.lobbyMap[x][y] = color(state.growth[state.plant][maps.data[x][y][1]]);
       }
     }
   }
@@ -234,6 +245,7 @@ function drawUI() {
   let outerFill;
   let innerFill;
   let char;
+  let name;
   let desc;
 
   // Cafeteria CannaSib
@@ -242,25 +254,28 @@ function drawUI() {
     innerFill = color(184, 184, 255);
     borderFill = color(147, 129, 255);
     char = "C";
+    name = "Cafeteria CannaSib";
     desc = "How come the cafeteria food is so bad, but they never stop eating it?";
   }
 
-  // Washroom WeDe
+  // Washroom WheDe
   else if (state.plant % 3 === 1) {
     outerFill = color(64, 110, 142);
     innerFill = color(142, 168, 195);
     borderFill = color(35, 57, 91);
     char = "W";
-    desc = "What's so good about the washroom that they gotta go every period? ";
+    name = "Washroom WheDe";
+    desc = "What's so good about the washroom that they gotta go every period?";
   }
 
-  // Hallway HeriOn
+  // Hallway HerIon
   else if (state.plant % 3 === 2) {
     outerFill = color(48, 105, 100);
     innerFill = color(105, 162, 151);
     borderFill = color(54, 60, 60);
     char = "H";
-    desc = "They're doing it again, there are rooms everywhere, what's so good about the halls?";
+    name = "Hallway HerIon";
+    desc = "There are rooms everywhere, why do they always stand in the halls?";
   }
 
   // Money Box
@@ -275,7 +290,8 @@ function drawUI() {
   stroke(borderFill);
   fill(outerFill);
   rect(4, cellSize / 2 + 58, cellSize / 2 + 56, cellSize / 2 + 56);
-  rect(4, windowHeight - 200, xOffset - 8, 196);
+  rect(cellSize / 2 + 56, cellSize / 2 + 58, 402, cellSize / 2 + 56);
+  rect(4, cellSize / 2 + 122, xOffset - 8, 196);
   fill(63, 112, 117);
    
   // Money
@@ -287,10 +303,16 @@ function drawUI() {
   // State + Description
   textSize(44);
   text(char, 18, cellSize / 2 + 106);
+  textSize(26);
+  text(name, 78, cellSize / 2 + 100);
+
   textSize(24);
-  text(desc, 14, windowHeight - 161, 450);
+  text(desc, 14, cellSize / 2 + 150, 475);
   fill(innerFill);
-  text(desc, 16, windowHeight - 160, 450);
+  text(desc, 16, cellSize / 2 + 150, 475);
+  textSize(26);
+  text(name, 76, cellSize / 2 + 100);
   textSize(44);
   text(char, 18, cellSize / 2 + 107);
+
 }
