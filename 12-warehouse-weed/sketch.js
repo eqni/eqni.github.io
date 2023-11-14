@@ -5,7 +5,14 @@
 //
 // Extra for Experts:
 // - loaded fonts
-// - 3D Arrays
+// - 3D Arrayssaaaa
+///////////////////////////////////////////////////////////////////////////////////////////
+// Game: You are a unique gardener who grows and sells weeds.
+//
+// Instructions: WASD to move character. (it doesn't do anything at the moment)
+// Moving out of the warehouse turns the player into truck mode, which elongates the character.
+// Mouse Press to plant and harvest weeds. Space press to mass harvest weeds. Up and Down 
+// Arrows filter through the different weeds.
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // Variables
@@ -55,6 +62,7 @@ function setup() {
   maps.data = genData();
 }
 
+// Centers the grid
 function resizeScale() {
   if (windowHeight >= windowWidth) {
     yOffset = (windowHeight - windowWidth) / 2;
@@ -65,27 +73,34 @@ function resizeScale() {
 }
 
 function mousePressed() {
+  // Variables corresponding to mouse pos within grid
   let px = floor((mouseX - xOffset) / cellSize);
   let py = floor((mouseY - yOffset) / cellSize);
-  if(maps.data[px][py][1] === 4) {
+
+  // Plants and collects weeds
+  if (maps.data[px][py][1] === 4) {
     money += maps.data[px][py][2];
-    maps.data[px][py] = 0;
+    maps.data[px][py] = 1;
     maps.lobbyMap[px][py] = color(random(220, 230));
   }
-  else if (state.plant % 3 === 0 && py > 0 && py < 34 && money >= 100){
-    maps.data[px][py] = [2, 0, 250];
-    maps.lobbyMap[px][py] = color(state.growth[0][0]);
-    money -= 100;
-  }
-  else if (state.plant % 3 === 1 && py > 0 && py < 34 && money >= 500){
-    maps.data[px][py] = [3, 0, 1000];
-    maps.lobbyMap[px][py] = color(state.growth[1][0]);
-    money -= 500;
-  }
-  else if (state.plant % 3 === 2 && py > 0 && py < 34 && money >= 200){
-    maps.data[px][py] = [4, 0, 5000];
-    maps.lobbyMap[px][py] = color(state.growth[2][0]);
-    money -= 2000;
+  else {
+    if (maps.data[px][py] === 1) {
+      if (state.plant === 0 && py > 0 && py < 34 && money >= 100){
+        maps.data[px][py] = [2, 0, 250];
+        maps.lobbyMap[px][py] = color(state.growth[0][0]);
+        money -= 100;
+      } 
+      else if (state.plant === 1 && py > 0 && py < 34 && money >= 500){
+        maps.data[px][py] = [3, 0, 1000];
+        maps.lobbyMap[px][py] = color(state.growth[1][0]);
+        money -= 500;
+      }
+      else if (state.plant === 2 && py > 0 && py < 34 && money >= 2000){
+        maps.data[px][py] = [4, 0, 5000];
+        maps.lobbyMap[px][py] = color(state.growth[2][0]);
+        money -= 2000;
+      }
+    }
   }
 }
 
@@ -96,20 +111,24 @@ function keyPressed() {
       for (let y = 0; y < 34; y++) {
         if(maps.data[x][y][1] === 4) {
           money += maps.data[x][y][2];
-          maps.data[x][y] = 0;
+          maps.data[x][y] = 1;
           maps.lobbyMap[x][y] = color(random(220, 230));
         }
       }
     }
   }
-  else if (keyCode === 38) {
+
+  // Changes current plant
+  if (keyCode === 38) {
     state.plant++;
   }
   else if (keyCode === 40) {
     state.plant++;
   }
+  state.plant = state.plant % 3;
 }
 
+// Wall checks the player and its state
 function gateCheck() {
   if(y < 33 && x > 22 && x < 28) {
     state.identity = "normal";
@@ -119,6 +138,7 @@ function gateCheck() {
   } 
 }
 
+// Simulates the game
 function draw() {
   noStroke();
   drawMap(GRID_SIZE, GRID_SIZE);
@@ -127,6 +147,7 @@ function draw() {
   drawUI();
 }
 
+// Loads the map
 function drawMap() {
   for (let x = 0; x < GRID_SIZE; x++) {
     for (let y = 0; y < GRID_SIZE; y++) {
@@ -136,6 +157,7 @@ function drawMap() {
   }
 }
 
+// Draws the player
 function drawPlayer() {
   fill(0);
   // Movement
@@ -170,6 +192,7 @@ function drawPlayer() {
   }
 }
 
+// Simulates plant growth
 function drawPlants() {
   for (let x = 0; x < GRID_SIZE; x++) {
     for (let y = 0; y < GRID_SIZE; y++) {
@@ -177,12 +200,13 @@ function drawPlants() {
         if (maps.data[x][y][1] < 4) {
           maps.data[x][y][1] += 1;
         }
-        maps.lobbyMap[x][y] = color(state.growth[state.plant][maps.data[x][y][1]]);
+        maps.lobbyMap[x][y] = color(state.growth[maps.data[x][y][0] - 2][maps.data[x][y][1]]);
       }
     }
   }
 }
 
+// Creates the map
 function genMap() {
   let newMap = [];
 
@@ -221,6 +245,7 @@ function genMap() {
   return newMap;
 }
 
+// Adds additional information to categorize specific items in the grid
 function genData() {
   let newMap = [];
   for (let x = 0; x < GRID_SIZE; x++) {
@@ -254,7 +279,7 @@ function drawUI() {
     innerFill = color(184, 184, 255);
     borderFill = color(147, 129, 255);
     char = "C";
-    name = "Cafeteria CannaSib";
+    name = "Cafe CannaSib";
     desc = "How come the cafeteria food is so bad, but they never stop eating it?";
   }
 
@@ -281,7 +306,7 @@ function drawUI() {
   // Money Box
   strokeWeight(8);
   fill(0);
-  rect(0, 0, 400, 100);
+  rect(0, 0, 250, 100);
   stroke(234, 173, 11);
   fill(255, 255, 167);
   rect(4, 4, 29 * money.toString().length + 15, cellSize / 2 + 46);
@@ -290,7 +315,7 @@ function drawUI() {
   stroke(borderFill);
   fill(outerFill);
   rect(4, cellSize / 2 + 58, cellSize / 2 + 56, cellSize / 2 + 56);
-  rect(cellSize / 2 + 56, cellSize / 2 + 58, 402, cellSize / 2 + 56);
+  rect(xOffset - 4, cellSize / 2 + 58, -xOffset + 72, cellSize / 2 + 56);
   rect(4, cellSize / 2 + 122, xOffset - 8, 196);
   fill(63, 112, 117);
    
@@ -304,14 +329,14 @@ function drawUI() {
   textSize(44);
   text(char, 18, cellSize / 2 + 106);
   textSize(26);
-  text(name, 78, cellSize / 2 + 100);
+  text(name, 78, cellSize / 2 + 100, xOffset);
 
   textSize(24);
-  text(desc, 14, cellSize / 2 + 150, 475);
+  text(desc, 14, cellSize / 2 + 150, 475, xOffset);
   fill(innerFill);
-  text(desc, 16, cellSize / 2 + 150, 475);
+  text(desc, 16, cellSize / 2 + 150, 475, xOffset);
   textSize(26);
-  text(name, 76, cellSize / 2 + 100);
+  text(name, 76, cellSize / 2 + 100, xOffset);
   textSize(44);
   text(char, 18, cellSize / 2 + 107);
 
