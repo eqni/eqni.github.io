@@ -9,6 +9,7 @@
 - [Terrain Generation](08-terrain-generation)
 - [Draw A Grid](10-2d-grid)
 - [Dog OOP](15-dog-oop)
+- [Walker OOP](16-walker-oop)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
