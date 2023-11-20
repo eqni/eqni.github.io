@@ -14,4 +14,4 @@
 ## Projects
 - [Interactive Scene](02-sandbox)
 - [Arrays & Object Notation](03-sandbox+)
-- [](09-snake-pit)
+- [Arrays & Object Notation+](09-snake-pit)
