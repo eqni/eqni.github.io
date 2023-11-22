@@ -10,6 +10,8 @@
 - [Draw A Grid](10-2d-grid)
 - [Dog OOP](15-dog-oop)
 - [Walker OOP](16-walker-oop)
+- [Nodes](17-nodes)
+- [Fireworks](18-fireworks)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
