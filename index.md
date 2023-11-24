@@ -12,8 +12,10 @@
 - [Walker OOP](16-walker-oop)
 - [Nodes](17-nodes)
 - [Fireworks](18-fireworks)
+- [Inheritance OOP](19-inheritance)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
 - [Arrays & Object Notation](03-sandbox+)
 - [Arrays & Object Notation+](09-snake-pit)
+
