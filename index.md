@@ -13,6 +13,7 @@
 - [Nodes](17-nodes)
 - [Fireworks](18-fireworks)
 - [Inheritance OOP](19-inheritance)
+- [Collision 2D Library](20-collision)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
