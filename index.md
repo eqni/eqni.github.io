@@ -14,6 +14,7 @@
 - [Fireworks](18-fireworks)
 - [Inheritance OOP](19-inheritance)
 - [Collision 2D Library](20-collision)
+- [Recursive Circles](21-circle-recursion)
 
 ## Projects
 - [Interactive Scene](02-sandbox)
